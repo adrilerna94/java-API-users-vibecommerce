@@ -1,10 +1,10 @@
 package com.adriauson.vibecommerce.vibecommerce.dto;
+import com.adriauson.vibecommerce.vibecommerce.validator.ValidEmail;
 import com.adriauson.vibecommerce.vibecommerce.validator.ValidPassword;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -29,9 +29,7 @@ public class UserDto {
     @Column(name= "lastName", nullable = false, length = 30)
     private String lastName;
 
-    @Email(message = "Must be a valid email")
-    @NotBlank(message = "Email is required")
-    @Column(nullable = false, unique = true, length = 50)
+    @ValidEmail
     private String email;
 
     @ValidPassword
