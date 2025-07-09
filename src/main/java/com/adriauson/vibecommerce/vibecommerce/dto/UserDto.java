@@ -1,11 +1,11 @@
 package com.adriauson.vibecommerce.vibecommerce.dto;
+import com.adriauson.vibecommerce.vibecommerce.validator.ValidPassword;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,13 +34,7 @@ public class UserDto {
     @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Column(name = "password", nullable = false)
-    @Size(min= 5, message = "Password must contain at least 5 characters")
-    @Pattern(
-            regexp = "^(?=.*[a-z])(?=.*[A-Z]).{5,}$",
-            message = "Must contain at least one upper and one lower case letter"
-    )
+    @ValidPassword
     private String password;
 
     @NotBlank(message = "Address is required")
