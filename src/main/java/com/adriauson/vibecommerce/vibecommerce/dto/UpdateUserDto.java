@@ -1,5 +1,7 @@
 package com.adriauson.vibecommerce.vibecommerce.dto;
-import com.adriauson.vibecommerce.vibecommerce.validator.*;
+
+import com.adriauson.vibecommerce.vibecommerce.dto.BaseUserDto;
+import com.adriauson.vibecommerce.vibecommerce.validator.ValidPassword;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,10 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDto extends BaseUserDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UpdateUserDto extends BaseUserDto {
 
     @ValidPassword
     private String password;
