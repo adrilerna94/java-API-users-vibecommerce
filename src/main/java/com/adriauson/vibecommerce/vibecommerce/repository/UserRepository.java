@@ -1,7 +1,7 @@
 package com.adriauson.vibecommerce.vibecommerce.repository;
 
 
-import com.adriauson.vibecommerce.vibecommerce.model.User;
+import com.adriauson.vibecommerce.vibecommerce.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
