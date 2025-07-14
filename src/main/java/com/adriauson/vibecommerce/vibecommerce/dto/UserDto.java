@@ -13,7 +13,4 @@ public class UserDto extends BaseUserDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ValidPassword
-    private String password;
 }

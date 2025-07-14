@@ -1,6 +1,9 @@
 package com.adriauson.vibecommerce.vibecommerce.dto;
 
+import com.adriauson.vibecommerce.vibecommerce.validation.groups.OnCreate;
+import com.adriauson.vibecommerce.vibecommerce.validation.groups.OnUpdate;
 import com.adriauson.vibecommerce.vibecommerce.validator.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,15 +18,23 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class BaseUserDto {
-    @ValidFirstName
+    @NotBlank(message = "Firstname is required", groups = OnCreate.class)
+    @ValidFirstName(groups = {OnCreate.class, OnUpdate.class})
     private String firstName;
 
-    @ValidLastName
+    @NotBlank(message= "Lastname is required", groups = OnCreate.class)
+    @ValidLastName(groups = {OnCreate.class, OnUpdate.class})
     private String lastName;
 
-    @ValidEmail
+    @NotBlank(message = "Email is required", groups = OnCreate.class)
+    @ValidEmail(groups = {OnCreate.class, OnUpdate.class})
     private String email;
 
-    @ValidAddress
+    @NotBlank(message= "Address is required", groups = OnCreate.class)
+    @ValidAddress(groups = {OnCreate.class, OnUpdate.class})
     private String address;
+
+    @NotBlank(message = "Password is requited", groups = OnCreate.class)
+    @ValidPassword(groups = {OnCreate.class, OnUpdate.class})
+    private String password;
 }

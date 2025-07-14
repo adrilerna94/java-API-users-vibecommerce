@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention (RetentionPolicy.RUNTIME)
 @Email(message = "Must be a valid email")
-@NotBlank(message = "Email is required")
 
 public @interface ValidEmail {
     String message() default "Invalid email";

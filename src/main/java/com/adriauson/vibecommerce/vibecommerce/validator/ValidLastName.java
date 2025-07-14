@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {})
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@NotBlank(message= "Lastname is required")
 @Size(min=3, max=30)
 
 public @interface ValidLastName {

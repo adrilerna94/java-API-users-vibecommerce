@@ -7,9 +7,9 @@ import com.adriauson.vibecommerce.vibecommerce.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    List<UserDto> getAllUsers ();
     UserDto getUserById (Long id);
-    UserDto updateUser(Long id, UpdateUserDto updateDto);
+    List<UserDto> getAllUsers ();
     UserDto registerUser (RegisterUserDto registerDto);
+    UserDto updateUser(Long id, UpdateUserDto updateDto);
     void deleteUser (Long id);
 }
