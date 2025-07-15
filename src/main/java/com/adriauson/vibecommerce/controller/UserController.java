@@ -1,13 +1,14 @@
 package com.adriauson.vibecommerce.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 
 import com.adriauson.vibecommerce.dto.RegisterUserDto;
 import com.adriauson.vibecommerce.dto.UpdateUserDto;
 import com.adriauson.vibecommerce.dto.UserDto;
 import com.adriauson.vibecommerce.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,96 +17,107 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /*
- * 📌 D de SOLID: Principio de Inversión de Dependencias (Dependency Inversion Principle)
+ * 📌 D of SOLID: Dependency Inversion Principle
  *
- * 👉 "Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones."
- * 👉 "Las abstracciones no deben depender de los detalles. Los detalles deben depender de las abstracciones."
+ * 👉 "High-level modules should not depend on low-level modules. Both should depend on abstractions."
+ * 👉 "Abstractions should not depend on details. Details should depend on abstractions."
  *
- * ✅ Implica que el controlador (u otra clase de alto nivel) debe depender de una interfaz (ej. UserService),
- *    no de una clase concreta (ej. UserServiceImpl).
- *
- * ✅ Ejemplo correcto:
+ * ✅ Example (correct):
  *    private final UserService userService;
  *
- * ❌ Ejemplo incorrecto:
+ * ❌ Bad practice:
  *    private final UserServiceImpl userService;
  *
- * ✅ Beneficios:
- *    - Menor acoplamiento
- *    - Código más mantenible y testeable
- *    - Fácil de cambiar implementaciones sin tocar otras capas
+ * ✅ Benefits:
+ *    - Lower coupling
+ *    - Easier testing and maintenance
+ *    - Easier to switch implementations
  */
-
-
-/*
- * ❌ Si inyecto UserServiceImpl directamente:
- *    - Rompo el principio de inversión de dependencias.
- *    - Mi controlador queda acoplado a una clase concreta.
- *    - No puedo sustituir fácilmente la implementación.
- *    - Ejemplo: si quiero usar FakeUserService para mockear el service
- *    - devo cambiar el tipo en el constructor y recompilar
- *    - Rompes la inversión de dependencias,
- *    porque una clase de alto nivel (el controller)
- *    depende de una clase concreta (bajo nivel).
-
- * ✅ Si inyecto la interfaz UserService:
- *    - Aplico D de SOLID (Inversión de dependencias).
- *    - Puedo cambiar la implementación sin tocar el controller.
- *    - Gano testabilidad, flexibilidad y bajo acoplamiento.
- */
-
-
+@Tag(name = "API USERS", description = "Users CRUD")
 @RestController
 @RequestMapping("api/v1/users")
 public class UserController {
+
     private final UserService userService;
 
-    public UserController (UserService userService){
+    public UserController(UserService userService){
         this.userService = userService;
     }
-    // http://localhost:8080/api/v1/users
+
     @PostMapping
     @Operation(
-            summary = "Registrar un nuevo usuario",
-            description = "Crea un nuevo usuario en el sistema y devuelve los datos creados",
+            summary = "Register a new user",
+            description = "Creates a new user in the system and returns the created data",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Usuario creado exitosamente"),
-                    @ApiResponse(responseCode = "409", description = "El email ya está en uso")
+                    @ApiResponse(responseCode = "201", description = "User successfully created"),
+                    @ApiResponse(responseCode = "409", description = "Email already in use"),
+                    @ApiResponse(responseCode = "400", description = "Invalid data provided for user creation"),
             }
     )
 
     public ResponseEntity<UserDto> registerUser(@Valid @RequestBody RegisterUserDto registerDto) {
-        UserDto userDto = this.userService.registerUser((registerDto));
-        // return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-
-        // mas limpio
+        UserDto userDto = this.userService.registerUser(registerDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @GetMapping
-    public ResponseEntity <List<UserDto>> getAllUsers() {
-        List <UserDto> userDtoList = this.userService.getAllUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(userDtoList);
+    @Operation(
+            summary = "Get all users",
+            description = "Returns all existing users from the database",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User list retrieved successfully"),
+            }
+    )
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> userDtoList = this.userService.getAllUsers();
+        return ResponseEntity.ok(userDtoList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
+    @Operation(
+            summary = "Get a user by ID",
+            description = "Retrieves an existing user by ID",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+                    @ApiResponse(responseCode = "404", description = "User not found"),
+            }
+    )
+    public ResponseEntity<UserDto> getUserById(
+            @Parameter(description = "ID of the user to retrieve", example = "2")
+            @PathVariable("id") Long id) {
         UserDto userDto = this.userService.getUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userDto);
+        return ResponseEntity.ok(userDto);
     }
 
-    // optamos por patch porque actualizamos parcialmente el recurso
-    // usaríamos PUT si necesitaramos todas las properties para actualizar el recurso
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserDto updateDto) {
+    @Operation(
+            summary = "Partially update a user",
+            description = "Updates an existing user by ID with partial data and returns the updated user",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User updated successfully"),
+                    @ApiResponse(responseCode = "404", description = "User not found"),
+                    @ApiResponse(responseCode = "400", description = "Invalid data for partial update"),
+            }
+    )
+    public ResponseEntity<UserDto> updateUser(
+            @Parameter(description = "ID of the user to update", example = "3")
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserDto updateDto) {
         UserDto updatedUser = this.userService.updateUser(id, updateDto);
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Delete a user",
+            description = "Deletes a user by ID",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "User successfully deleted"),
+                    @ApiResponse(responseCode = "404", description = "User not found"),
+            }
+    )
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         this.userService.deleteUser(id);
-        return ResponseEntity.noContent().build(); // 204 no content sin body
+        return ResponseEntity.noContent().build();
     }
-
 }
