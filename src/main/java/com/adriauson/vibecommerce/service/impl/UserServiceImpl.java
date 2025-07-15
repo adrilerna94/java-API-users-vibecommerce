@@ -4,7 +4,7 @@ import com.adriauson.vibecommerce.dto.RegisterUserDto;
 import com.adriauson.vibecommerce.dto.UpdateUserDto;
 import com.adriauson.vibecommerce.dto.UserDto;
 import com.adriauson.vibecommerce.exception.EmailAlreadyExistsException;
-import com.adriauson.vibecommerce.exception.UserNoSuchElementException;
+import com.adriauson.vibecommerce.exception.UserNotFoundException;
 import com.adriauson.vibecommerce.mapper.UserMapper;
 import com.adriauson.vibecommerce.entity.User;
 import com.adriauson.vibecommerce.repository.UserRepository;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> {
                     String message = this.messageSource.getMessage("entity.not.found", new Object[]{id}, Locale.getDefault());
                     logger.error("User not found with ID: {}", id);
-                    return new UserNoSuchElementException(message, id);
+                    return new UserNotFoundException(message, id);
                 });
 
         logger.debug("User found with ID: {}", id);
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> {
                     String message = this.messageSource.getMessage("entity.not.found", new Object[]{id}, Locale.getDefault());
                     logger.error("Cannot update, user not found with ID: {}", id);
-                    return new UserNoSuchElementException(message, id);
+                    return new UserNotFoundException(message, id);
                 });
 
         this.userMapper.mapUpdateUserDtoToExistingUser(updateDto, existingUser);
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> {
                     String message = this.messageSource.getMessage("entity.not.found", new Object[]{id}, Locale.getDefault());
                     logger.error("Cannot delete, user not found with ID: {}", id);
-                    return new UserNoSuchElementException(message, id);
+                    return new UserNotFoundException(message, id);
                 });
 
         this.userRepository.deleteById(id);

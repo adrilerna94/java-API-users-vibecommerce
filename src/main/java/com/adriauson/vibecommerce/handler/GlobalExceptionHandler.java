@@ -1,7 +1,7 @@
 package com.adriauson.vibecommerce.handler;
 
 import com.adriauson.vibecommerce.exception.EmailAlreadyExistsException;
-import com.adriauson.vibecommerce.exception.UserNoSuchElementException;
+import com.adriauson.vibecommerce.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,8 +38,8 @@ public class GlobalExceptionHandler {
         // 📤 Devolvemos una respuesta con cuerpo personalizado y código 409 Conflict
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
-    @ExceptionHandler(UserNoSuchElementException.class)
-    public ResponseEntity<?> handleUserNoSuchElementException(UserNoSuchElementException exception) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleUserNoSuchElementException(UserNotFoundException exception) {
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.NOT_FOUND.value());

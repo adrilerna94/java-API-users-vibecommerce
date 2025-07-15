@@ -1,9 +1,9 @@
 package com.adriauson.vibecommerce.exception;
 
-public class UserNoSuchElementException extends RuntimeException {
+public class UserNotFoundException extends RuntimeException {
     private final Long id;
 
-    public UserNoSuchElementException(String message, Long id) {
+    public UserNotFoundException(String message, Long id) {
         super(message);
         this.id = id;
     }
