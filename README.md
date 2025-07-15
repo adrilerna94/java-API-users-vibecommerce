@@ -35,13 +35,13 @@ Un usuario debe tener los siguientes campos, junto con sus validaciones:
 ````
 ## 🔌 Endpoints requeridos
 
-| Método | Ruta         | Descripción                       |
-|--------|--------------|-----------------------------------|
-| POST   | `/users`     | Crear una nueva tarea             |
-| GET    | `/users`     | Listar todas las tareas           |
-| GET    | `/users/:id` | Obtener una tarea por su ID       |
-| PUT    | `/users/:id` | Actualizar una tarea existente    |
-| DELETE | `/users/:id` | Eliminar una tarea                |
+| Método | Ruta         | Descripción                        |
+|--------|--------------|------------------------------------|
+| POST   | `/users`     | registrar un nuevo usuario         |
+| GET    | `/users`     | Listar todos los usuarios          |
+| GET    | `/users/:id` | Obtener un usuario por su ID       |
+| PATCH  | `/users/:id` | Actualizar parcialmente un usuario |
+| DELETE | `/users/:id` | Eliminar un usuario por ID         |
 
 ---
 
